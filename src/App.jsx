@@ -12,6 +12,7 @@ const SignUp = lazy(() => import('@/pages/SignUp'));
 const Login = lazy(() => import('@/pages/Login'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const StoreForm = lazy(() => import('@/pages/reports/add-update'));
+const Users = lazy(() => import('@/pages/users'));
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout><Home /></Layout>} />
           <Route path="/view" element={<View />} />
+          <Route path="/users" element={<Layout><Users /></Layout>} />
 
           <Route path="/reports" element={<Layout><Reports /></Layout>} />
           <Route path="/reports-history" element={<Layout><ReportsHistory /></Layout>} />

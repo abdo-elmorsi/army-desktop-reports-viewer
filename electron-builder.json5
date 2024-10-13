@@ -1,5 +1,5 @@
 {
-  "appId": "com.yourcompany.yourapp",  // Replace with your app ID
+  "appId": "net.yourcompany.yourapp",  // Replace with your app ID
   "asar": true,
   "directories": {
     "output": "release/${version}"  // Ensure this path is correct

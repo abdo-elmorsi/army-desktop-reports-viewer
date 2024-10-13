@@ -6,6 +6,7 @@ const validChannels = [
     "update-user",
     "delete-user",
     "get-report",
+    "get-in-progress-report-index",
     "add-report",
     "update-report",
     "delete-report",

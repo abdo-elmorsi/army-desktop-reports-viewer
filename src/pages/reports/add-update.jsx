@@ -16,7 +16,8 @@ const ReportForm = () => {
 
     // Loop to add the specified number of reports
     for (let i = 0; i < count; i++) {
-      await addItem([]); // Pass the necessary report data, if any
+      const data = i === 0 ? ["in-progress"] : []
+      await addItem(data); // Pass the necessary report data, if any
     }
 
     navigate('/reports');

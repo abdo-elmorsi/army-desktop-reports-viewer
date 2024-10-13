@@ -2,6 +2,7 @@ import path from "node:path";
 import betterSqlite3 from "better-sqlite3";
 import { fileURLToPath } from "node:url";
 import { app } from "electron";
+import { format } from "date-fns";
 
 interface User {
     id?: number;
@@ -26,6 +27,8 @@ class DatabaseManager {
     private static db: betterSqlite3.Database | null = null;
 
     private static getDatabasePath(): string {
+        console.log({ isPackaged: app.isPackaged });
+
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
         return app.isPackaged
@@ -112,11 +115,55 @@ class DatabaseManager {
     }
 
     // ******************** Reports ********************
-    public static getReports(statusFilter?: string): Report[] {
-        const query = statusFilter
-            ? "SELECT * FROM report WHERE status = ?"
-            : "SELECT * FROM report";
-        return this.executeQuery(query, statusFilter ? [statusFilter] : []);
+    public static getReports(statusFilter?: string, date?: string): Report[] {
+        // Format date if provided
+        const formattedDate = date
+            ? format(new Date(date), "yyyy-MM-dd")
+            : undefined;
+
+        // Construct the base query
+        let query = "SELECT * FROM report";
+        const params: any[] = [];
+
+        // Add conditions for statusFilter and date
+        if (statusFilter || formattedDate) {
+            query += " WHERE";
+            if (statusFilter) {
+                query += " status = ?";
+                params.push(statusFilter);
+            }
+            if (formattedDate) {
+                query += statusFilter ? " AND" : "";
+                query += " DATE(createdAt) = ?";
+                params.push(formattedDate);
+            }
+        }
+
+        return this.executeQuery(query, params);
+    }
+
+    public static getInProgressReportIndex(): number | null {
+        const today = format(new Date(), "yyyy-MM-dd");
+
+        const query = `
+        SELECT rowIndex
+        FROM (
+            SELECT 
+                id, 
+                status, 
+                row_number() OVER (ORDER BY id) as rowIndex
+            FROM report
+            WHERE DATE(createdAt) = ?
+        ) AS todayReports
+        WHERE status = 'in-progress'
+        LIMIT 1;
+    `;
+
+        const result = this.executeQuery(query, [today]) as {
+            rowIndex: number;
+        }[];
+
+        return result.length ? result[0].rowIndex : null;
     }
 
     public static addReport(

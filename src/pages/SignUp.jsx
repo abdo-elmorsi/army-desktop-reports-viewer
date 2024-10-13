@@ -16,7 +16,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addItem([userName.value, password.value, "admin"]);
+    await addItem([userName.value, password.value]);
     navigate('/login');
   };
 

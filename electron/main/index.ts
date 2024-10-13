@@ -115,8 +115,11 @@ app.whenReady().then(() => {
     });
 
     // ********************Reports********************
-    ipcMain.handle("get-report", async (_, status) => {
-        return DatabaseManager.getReports(status);
+    ipcMain.handle("get-report", async (_, status, date) => {
+        return DatabaseManager.getReports(status, date);
+    });
+    ipcMain.handle("get-in-progress-report-index", async () => {
+        return DatabaseManager.getInProgressReportIndex();
     });
 
     ipcMain.handle("add-report", async (_, status, createdAt) => {

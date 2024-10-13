@@ -2,14 +2,15 @@ import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDatabase } from '@/hooks';
 import { Button, Error, Select } from '@/components';
-import { BiEdit, BiTrash } from 'react-icons/bi';
+import { BiTrash } from 'react-icons/bi';
 import { statusOptions, statusColors } from '@/assets';
+import { speakReportNumber } from '@/utils';
 
 
 
 const Reports = () => {
   const navigate = useNavigate();
-  const { data: reports, fetchData, loading, error, deleteItem, updateItem } = useDatabase('report');
+  const { data: reports, fetchData, loading, error, deleteItem, updateItem } = useDatabase('report', null, ["", new Date()]);
 
   const handleDelete = useCallback(async (id) => {
     const confirmationMessage = 'هل انت متأكد من حذف هذا البلاغ';
@@ -24,19 +25,19 @@ const Reports = () => {
     return <Error message={error} onRetry={() => window.location.reload()} />;
   }
 
-  const handleSelectChange = async (selectedOption, report) => {
+  const handleSelectChange = async (selectedOption, report, reportNumber) => {
     if (!selectedOption) return; // Check if a valid option is selected
     const { value } = selectedOption;
     // Run text-to-speech when status is changed to "in-progress"
-      const speech = new SpeechSynthesisUtterance(); // Create a new SpeechSynthesisUtterance instance
-      speech.text = `بلاغ رقم ${report.id}`; // Set the text to read
-      speech.lang = 'ar-EG'; // Set the language to Arabic
-      speech.rate = 0.8; // You can adjust the rate of speech if needed
-      speech.pitch = 1; // You can adjust the pitch of the speech if needed
-      window.speechSynthesis.speak(speech); // Speak the text
-    
+    speakReportNumber(reportNumber);
+
+    if (value === "in-progress") {
+      const inProgressReport = reports.find(report => report.status === "in-progress");
+      inProgressReport && await updateItem(inProgressReport.id, ["completed"]);
+    }
+
     await updateItem(report.id, [value]);
-    fetchData(null, [""]);
+    fetchData(null, ["", new Date()]);
   };
 
   return (
@@ -46,7 +47,7 @@ const Reports = () => {
         to="/reports/add"
         className="bg-primary text-white px-4 py-2 rounded hover:bg-hoverPrimary mb-4 inline-block"
       >
-        أضافة بلاغات اخري
+        {reports?.length ? "أضافة بلاغات اخري" : "أضافة بلاغات جديده"}
       </Link>
       <div className="overflow-auto" style={{ height: '60vh' }}>
         <table className="w-full bg-white dark:bg-gray-800 shadow-md rounded border border-gray-200 dark:border-gray-700">
@@ -67,7 +68,7 @@ const Reports = () => {
                 const status = statusOptions.find(status => status.value === report.status);
                 return (
                   <tr key={report.id} className={`${i % 2 === 0 ? 'bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-800'}`}>
-                    <td className="text-center p-4 text-gray-800 dark:text-gray-200">{i + 1}</td>
+                    <td className="text-center p-4 text-gray-800 dark:text-gray-200">{i + 2}</td>
                     <td className={`text-center p-4 ${statusColors[report.status]}`}>
                       {status?.label}
                     </td>
@@ -76,7 +77,7 @@ const Reports = () => {
                       <div className="relative">
                         <Select
                           value={""}
-                          onChange={(value) => handleSelectChange(value, report)}
+                          onChange={(value) => handleSelectChange(value, report, i + 2)}
                           isOptionDisabled={option => option.value === report.status}
                           placeholder="اختيار إجراء"
                           options={statusOptions}

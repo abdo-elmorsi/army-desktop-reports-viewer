@@ -39,12 +39,21 @@ const Sidebar = () => {
       to: '/reports',
       label: 'بلاغات اليوم',
       icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
-
+    },
+    {
+      to: '/reports-history',
+      label: 'البلاغات السابقه',
+      icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
     },
     {
       to: '/settings',
       label: 'الاعدادات',
       icon: (isActive) => <MdSettings size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+    },
+     {
+      to: '/users',
+      label: 'المستخدمين',
+      icon: (isActive) =>  <BiUserPlus size={22} className={isActive ? "text-white":"text-primary hover:text-white"} />
 
     },
   ];
