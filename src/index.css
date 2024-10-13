@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 500;
+    direction: rtl;
+}
+
+body {
+    margin: 0;
+}
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+    background-color: #f0f0f0; /* Background of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #336a86; /* Color of the scroll thumb */
+    border-radius: 10px; /* Round edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #28556c; /* Darker color on hover */
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: #336a86; /* Even darker color when active */
+}
+
+@layer components {
+    .btn {
+        @apply cursor-pointer rounded-lg text-base font-medium  py-2 px-4 disabled:cursor-not-allowed disabled:opacity-50 border-none;
+    }
+    .btn--primary {
+        @apply bg-primary text-white hover:bg-hoverPrimary disabled:hover:bg-hoverPrimary;
+    }
+    .btn--secondary {
+        @apply border border-gray-300 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-800  text-primary dark:text-white;
+    }
+    .btn--red {
+        @apply bg-red-500 text-white;
+    }
+}
+.sidebar {
+    height: calc(100vh - 88px);
+}
+
+a {
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* animation */
+.slide-enter {
+    transform: translateX(-500px);
+    opacity: 0;
+    -webkit-transform: translateX(-500px);
+    -moz-transform: translateX(-500px);
+    -ms-transform: translateX(-500px);
+    -o-transform: translateX(-500px);
+}
+.slide-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    -webkit-transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    -moz-transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    -ms-transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    -o-transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+}
+.slide-exit {
+    transform: translateX(0);
+    opacity: 1;
+    display: none;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+}
+.slide-exit-active {
+    transform: translateX(-500px);
+    opacity: 0;
+    display: none;
+    transition: transform 500ms ease-out, opacity 500ms ease-out;
+    -webkit-transform: translateX(-500px);
+    -moz-transform: translateX(-500px);
+    -ms-transform: translateX(-500px);
+    -o-transform: translateX(-500px);
+}
+
+/* date picker */
+.react-date-picker__wrapper {
+    width: 100%;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+
+.react-date-picker__calendar {
+    z-index: 15 !important;
+}
+.dark {
+    .react-date-picker__clear-button,
+    .react-date-picker__calendar-button {
+        svg {
+            stroke: #fff !important;
+        }
+    }
+}
+
+/* @media print {
+    body {
+        visibility: hidden;
+    }
+    #printableArea {
+        visibility: visible;
+    }
+} */
