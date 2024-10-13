@@ -11,7 +11,8 @@ const validChannels = [
     "update-report",
     "delete-report",
     "get-first-date-in-report",
-    "show-prompt"
+    "show-prompt",
+    "open-external-link",
 ];
 
 // Expose ipcRenderer methods to the renderer process
@@ -32,9 +33,6 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
         }
         throw new Error("Invalid channel");
     },
-
-    showPrompt: (message: any, defaultValue: any) =>
-        ipcRenderer.invoke("show-prompt", message, defaultValue),
 
     // Additional methods as needed
 });

@@ -32,7 +32,7 @@ class DatabaseManager {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
         return app.isPackaged
-            ? path.join(app.getPath("userData"), "databases/database.db")
+            ? path.join(app.getPath("userData"), "database.db")
             : path.join(__dirname, "../../src/db/database.db");
     }
 

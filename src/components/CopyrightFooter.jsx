@@ -1,15 +1,18 @@
-// src/components/CopyrightFooter.js
 import React from 'react';
 
 const CopyrightFooter = () => {
+	const openExternalLink = (event) => {
+		event.preventDefault();
+		window.ipcRenderer.invoke('open-external-link', 'https://elmorsi.vercel.app');
+	};
+
 	return (
-		<p className="fixed text-xs pointer-events-none bottom-1 left-2 rtl:left-auto rtl:right-2 dark:text-white">
+		<p className="fixed text-xs bottom-1 left-2 rtl:left-auto rtl:right-2 dark:text-white">
 			© Copyright:{' '}
 			<a
-				target="_blank"
-				rel="noreferrer"
-				className="text-primary hover:underline"
-				href="https://elmorsi.vercel.app/"
+				href="#"
+				onClick={openExternalLink}
+				className="text-primary hover:underline pointer-events-auto" // Ensure the link is clickable
 			>
 				Abdo
 			</a>{' '}

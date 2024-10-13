@@ -29,7 +29,7 @@ export default function Users() {
         const confirmationMessage = 'هل انت متأكد من حذف هذا المستخدم';
         const isConfirmed = window.location.host.includes('vercel.app')
             ? window.confirm(confirmationMessage)
-            : await window.ipcRenderer.showPrompt(confirmationMessage, 'John Doe');
+            : await window.ipcRenderer.invoke('show-prompt', confirmationMessage);
 
         if (isConfirmed) {
             await deleteItem(id);
