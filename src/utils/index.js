@@ -14,7 +14,7 @@ export function sum(arr, prop) {
 export const speakReportNumber = (reportNumber) => {
     const speech = new SpeechSynthesisUtterance(); // Create a new SpeechSynthesisUtterance instance
     speech.text = `بلاغ رقم ${reportNumber}`; // Set the text to read
-    speech.lang = "ar-EG"; // Set the language to Arabic
+    speech.lang = "ar-SA"; // Set the language to Arabic
     speech.rate = 0.8; // Adjust the rate of speech if needed
     speech.pitch = 1; // Adjust the pitch of the speech if needed
     window.speechSynthesis.speak(speech); // Speak the text

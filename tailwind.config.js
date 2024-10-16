@@ -9,11 +9,11 @@ export default {
             },
             keyframes: {
                 "slide-left-to-right": {
-                    "0%": { transform: "translateX(-200%)" }, // Start off-screen left
+                    "0%": { transform: "translateX(-220%)" }, // Start off-screen left
                     // "20%": { transform: "translateX(-50%)" },  // Moves quickly to near the center
                     "50%": { transform: "translateX(0%)" },    // Stays in the center
                     // "80%": { transform: "translateX(50%)" },    // Moves out of the center
-                    "100%": { transform: "translateX(200%)" },  // Ends off-screen right
+                    "100%": { transform: "translateX(220%)" },  // Ends off-screen right
                 },
             },
             animation: {

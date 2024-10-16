@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Error } from '@/components';
-import { speakReportNumber } from '@/utils';
 import { useNavigate } from 'react-router-dom';
+import { logoBase64 } from '../assets';
 
 const View = () => {
   const navigate = useNavigate();
@@ -16,9 +16,9 @@ const View = () => {
         const result = await window.ipcRenderer.invoke('get-in-progress-report-index');
 
         // Check if result is different from the current report number
-        if (result !== null && result !== reportNumber) {
-          speakReportNumber(result + 1);
-        }
+        // if (result !== null && result != reportNumber) {
+        //   speakReportNumber(result + 1);
+        // }
 
 
         setReportNumber(result || null);
@@ -56,13 +56,34 @@ const View = () => {
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 h-screen flex justify-center items-center overflow-hidden">
-      <div className="sidebar flex justify-center items-center w-full h-full">
-        <h1 className="text-9xl font-bold text-center text-primary dark:text-white animate-slide-left-to-right">
-          {loading ? "تحميل..." : +reportNumber ? `بلاغ رقم ${reportNumber + 1}` : 'لا يوجد بلاغات'}
-        </h1>
+    // <div className="bg-primary dark:bg-gray-900 h-screen flex justify-center items-center ">
+    <div className="bg-primary h-screen overflow-hidden">
+      <div className='flex justify-between items-center px-6 pt-2'>
+        <div className='text-white'>
+          <h1 className='m-0 text-yellow-200 text-4xl'>وزارة الداخلية</h1>
+          <h2 className='m-0 text-yellow-200'>مديرية أمن كفر الشيخ</h2>
+          <h3 className='m-0 text-yellow-200'>قسم تكنولوجيا المعلومات</h3>
+        </div>
+        <div>
+          <img
+            src={logoBase64}
+            alt="Logo"
+            className="h-24 w-24 rounded-full"
+          />
+        </div>
+      </div>
+      <div className='flex justify-center items-start pt-32 h-full'>
+        {loading ? <span>تحميل...</span> :
+          <>
+            <div className="flex flex-col gap-4 items-center animate-slide-left-to-right">
+              <p className='text-9xl font-bold text-white m-0'>{+reportNumber ? `بلاغ رقم` : 'لا يوجد بلاغات'}</p>
+              {+reportNumber ?<p className='text-9xl font-bold text-white m-0'>({+reportNumber + 1 })</p>:null}
+            </div>
+          </>
+        }
       </div>
     </div>
+    // </div>
   );
 };
 

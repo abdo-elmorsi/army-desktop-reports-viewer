@@ -27,8 +27,6 @@ class DatabaseManager {
     private static db: betterSqlite3.Database | null = null;
 
     private static getDatabasePath(): string {
-        console.log({ isPackaged: app.isPackaged });
-
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
         return app.isPackaged
@@ -166,6 +164,26 @@ class DatabaseManager {
         return result.length ? result[0].rowIndex : null;
     }
 
+    public static getReportsByDay(
+        startDate: string
+    ): { date: string; reportCount: number }[] {
+        
+        const query = `
+            SELECT 
+                DATE(createdAt) as date, 
+                COUNT(*) as reportCount
+            FROM report
+            WHERE DATE(createdAt) >= ?
+            GROUP BY DATE(createdAt)
+            ORDER BY DATE(createdAt);
+        `;
+
+        return this.executeQuery(query, [startDate]) as {
+            date: string;
+            reportCount: number;
+        }[];
+    }
+
     public static addReport(
         status: ReportStatus = "pending",
         createdAt: string = new Date().toISOString()
@@ -215,7 +233,6 @@ class DatabaseManager {
     public static closeDatabase(): void {
         if (this.db) {
             this.db.close();
-            console.log("Database connection closed.");
         }
     }
 }

@@ -26,34 +26,34 @@ const Sidebar = () => {
     {
       to: '/',
       label: 'القائمه الرئيسيه',
-      icon: (isActive) => <FaHome size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+      icon: (isActive) => <FaHome size={22} className={isActive ? "text-white" : "text-primary dark:text-white hover:text-white"} />
 
     },
     {
       to: '/view',
       label: 'شاشة العرض',
-      icon: (isActive) => <FaEye size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+      icon: (isActive) => <FaEye size={22} className={isActive ? "text-white" : "text-primary dark:text-white hover:text-white"} />
 
     },
     {
       to: '/reports',
       label: 'بلاغات اليوم',
-      icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+      icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary dark:text-white hover:text-white"} />
     },
     {
       to: '/reports-history',
       label: 'البلاغات السابقه',
-      icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+      icon: (isActive) => <CgToday size={22} className={isActive ? "text-white" : "text-primary dark:text-white hover:text-white"} />
     },
     {
       to: '/settings',
       label: 'الاعدادات',
-      icon: (isActive) => <MdSettings size={22} className={isActive ? "text-white" : "text-primary hover:text-white"} />
+      icon: (isActive) => <MdSettings size={22} className={isActive ? "text-white" : "text-primary dark:text-white hover:text-white"} />
     },
      {
       to: '/users',
       label: 'المستخدمين',
-      icon: (isActive) =>  <BiUserPlus size={22} className={isActive ? "text-white":"text-primary hover:text-white"} />
+      icon: (isActive) =>  <BiUserPlus size={22} className={isActive ? "text-white":"text-primary dark:text-white hover:text-white"} />
 
     },
   ];

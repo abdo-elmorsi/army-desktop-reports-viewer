@@ -24,7 +24,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
-const isProduction = true;
+const isProduction = false;
 
 async function createWindow() {
     win = new BrowserWindow({
@@ -124,6 +124,9 @@ app.whenReady().then(() => {
 
     ipcMain.handle("add-report", async (_, status, createdAt) => {
         return DatabaseManager.addReport(status, createdAt);
+    });
+    ipcMain.handle("get-reports-by-day", async (_,startDate) => {
+        return DatabaseManager.getReportsByDay(startDate);
     });
 
     ipcMain.handle("update-report", async (_, id, status) => {

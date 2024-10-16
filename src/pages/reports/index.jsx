@@ -5,6 +5,7 @@ import { Button, Error, Select } from '@/components';
 import { BiTrash } from 'react-icons/bi';
 import { statusOptions, statusColors } from '@/assets';
 import { speakReportNumber } from '@/utils';
+import { AiFillSound } from 'react-icons/ai';
 
 
 
@@ -25,11 +26,9 @@ const Reports = () => {
     return <Error message={error} onRetry={() => window.location.reload()} />;
   }
 
-  const handleSelectChange = async (selectedOption, report, reportNumber) => {
+  const handleSelectChange = async (selectedOption, report) => {
     if (!selectedOption) return; // Check if a valid option is selected
     const { value } = selectedOption;
-    // Run text-to-speech when status is changed to "in-progress"
-    speakReportNumber(reportNumber);
 
     if (value === "in-progress") {
       const inProgressReport = reports.find(report => report.status === "in-progress");
@@ -74,10 +73,13 @@ const Reports = () => {
                     </td>
 
                     <td className="p-4 justify-center gap-2 flex">
+                      <Button disabled={false} onClick={() => speakReportNumber(i + 2)} className="btn--primary flex items-center gap-2">
+                        <AiFillSound />
+                      </Button>
                       <div className="relative">
                         <Select
                           value={""}
-                          onChange={(value) => handleSelectChange(value, report, i + 2)}
+                          onChange={(value) => handleSelectChange(value, report)}
                           isOptionDisabled={option => option.value === report.status}
                           placeholder="اختيار إجراء"
                           options={statusOptions}
