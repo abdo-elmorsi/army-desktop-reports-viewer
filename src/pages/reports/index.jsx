@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useDatabase } from '@/hooks';
 import { Button, Error, Select } from '@/components';
 import { BiTrash } from 'react-icons/bi';
@@ -10,8 +9,7 @@ import { AiFillSound } from 'react-icons/ai';
 
 
 const Reports = () => {
-  const navigate = useNavigate();
-  const { data: reports, fetchData, loading, error, deleteItem, updateItem } = useDatabase('report', null, ["", new Date()]);
+  const { data: reports, fetchData, loading, error, addItem, deleteItem, updateItem } = useDatabase('report', null, ["", new Date()]);
 
   const handleDelete = useCallback(async (id) => {
     const confirmationMessage = 'هل انت متأكد من حذف هذا البلاغ';
@@ -22,10 +20,12 @@ const Reports = () => {
     }
   }, [deleteItem]);
 
-  if (error) {
-    return <Error message={error} onRetry={() => window.location.reload()} />;
-  }
 
+  const handleAddNewReport = async () => {
+    await addItem([]);
+    fetchData(null, ["", new Date()]);
+
+  }
   const handleSelectChange = async (selectedOption, report) => {
     if (!selectedOption) return; // Check if a valid option is selected
     const { value } = selectedOption;
@@ -39,15 +39,19 @@ const Reports = () => {
     fetchData(null, ["", new Date()]);
   };
 
+
+  if (error) {
+    return <Error message={error} onRetry={() => window.location.reload()} />;
+  }
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-900">
       <h1 className="text-2xl mb-4 text-gray-800 dark:text-white">البلاغات</h1>
-      <Link
-        to="/reports/add"
-        className="bg-primary text-white px-4 py-2 rounded hover:bg-hoverPrimary mb-4 inline-block"
+      <Button
+      disabled={loading}
+        onClick={handleAddNewReport}
       >
-        {reports?.length ? "أضافة بلاغات اخري" : "أضافة بلاغات جديده"}
-      </Link>
+        أضافة بلاغ جديد
+      </Button>
       <div className="overflow-auto" style={{ height: '60vh' }}>
         <table className="w-full bg-white dark:bg-gray-800 shadow-md rounded border border-gray-200 dark:border-gray-700">
           <thead className="bg-gray-300 dark:bg-gray-800 sticky top-0 z-10">

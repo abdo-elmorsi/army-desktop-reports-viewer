@@ -11,35 +11,30 @@ export function sum(arr, prop) {
     }, 0);
 }
 
-export const speakReportNumber = (reportNumber) => {
-    const speech = new SpeechSynthesisUtterance(); // Create a new SpeechSynthesisUtterance instance
-    speech.text = `بلاغ رقم ${reportNumber}`; // Set the text to read
-    speech.lang = "ar-SA"; // Set the language to Arabic
-    speech.rate = 0.8; // Adjust the rate of speech if needed
-    speech.pitch = 1; // Adjust the pitch of the speech if needed
-    window.speechSynthesis.speak(speech); // Speak the text
-};
-
-
-
-// export const speakReportNumber = (reportNumber, timeout = 1000) => {
-//     // Create a new SpeechSynthesisUtterance instance
-//     const speech = new SpeechSynthesisUtterance();
-//     speech.text = "بلاغ رقم"; // Set the text to read
+// export const speakReportNumber = (reportNumber) => {
+//     const speech = new SpeechSynthesisUtterance(); // Create a new SpeechSynthesisUtterance instance
+//     speech.text = `بلاغ رقم ${reportNumber}`; // Set the text to read
 //     speech.lang = "ar-SA"; // Set the language to Arabic
 //     speech.rate = 0.8; // Adjust the rate of speech if needed
 //     speech.pitch = 1; // Adjust the pitch of the speech if needed
-
-//     // Speak the text
-//     window.speechSynthesis.speak(speech);
-
-//     // Set a timeout to play the audio after the specified time
-//     setTimeout(() => {
-//         // Play audio for the report number
-//         const audio = new Audio(`/src/assets/${reportNumber}.mp3`); // Adjust the path as needed
-//         audio.play().catch((error) => {
-//             console.error("Error playing audio:", error);
-//         });
-//     }, timeout); // Timeout in milliseconds
+//     window.speechSynthesis.speak(speech); // Speak the text
 // };
+
+export const speakReportNumber = async (reportNumber, timeout = 1000) => {
+    try {
+        const reportAudio = new Audio(`/src/assets/report-number.mp3`); // Adjust path if needed
+        const numberAudio = new Audio(`/src/assets/${reportNumber}.mp3`); // Adjust path if needed
+
+        // Play "report-number" audio first
+        await reportAudio.play();
+
+        // Optional delay between the audios if needed
+        await new Promise((resolve) => setTimeout(resolve, timeout));
+
+        // Play the report number audio
+        await numberAudio.play();
+    } catch (error) {
+        console.error("Error playing audio:", error);
+    }
+};
 

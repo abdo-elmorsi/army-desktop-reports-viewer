@@ -5,10 +5,10 @@ import { Button, Input, Error } from '@/components';
 
 const ReportForm = () => {
   const navigate = useNavigate();
-  const { error, addItem } = useDatabase('report');
+  const { error, addItem, loading } = useDatabase('report');
 
   // Input for the number of reports
-  const numberOfReports = useInput(10, "number", true);
+  const numberOfReports = useInput(1, "number", true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +16,8 @@ const ReportForm = () => {
 
     // Loop to add the specified number of reports
     for (let i = 0; i < count; i++) {
-      const data = i === 0 ? ["in-progress"] : []
+      const data = []
+      // const data = i === 0 ? ["in-progress"] : []
       await addItem(data); // Pass the necessary report data, if any
     }
 
@@ -60,7 +61,7 @@ const ReportForm = () => {
           <Button className="btn--red w-36" onClick={() => navigate('/reports')}>
             إلغاء
           </Button>
-          <Button className="btn--primary w-36" disabled={!+numberOfReports.value} type="submit">
+          <Button className="btn--primary w-36" disabled={!+numberOfReports.value || loading} type="submit">
             حفظ
           </Button>
         </div>

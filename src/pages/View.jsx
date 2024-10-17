@@ -11,25 +11,18 @@ const View = () => {
 
   useEffect(() => {
     const fetchReportIndex = async () => {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
       try {
         const result = await window.ipcRenderer.invoke('get-in-progress-report-index');
-
-        // Check if result is different from the current report number
-        // if (result !== null && result != reportNumber) {
-        //   speakReportNumber(result + 1);
-        // }
-
-
         setReportNumber(result || null);
       } catch (err) {
         setError(err?.message || 'Failed to fetch in-progress report index');
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
-    fetchReportIndex(); // Fetch immediately when component mounts
+    fetchReportIndex();
 
     // Set up an interval to fetch every 5 seconds
     const intervalId = setInterval(fetchReportIndex, 5000);
@@ -75,9 +68,9 @@ const View = () => {
       <div className='flex justify-center items-start pt-32 h-full'>
         {loading ? <span>تحميل...</span> :
           <>
-            <div className="flex flex-col gap-4 items-center animate-slide-left-to-right">
-              <p className='text-9xl font-bold text-white m-0'>{+reportNumber ? `بلاغ رقم` : 'لا يوجد بلاغات'}</p>
-              {+reportNumber ?<p className='text-9xl font-bold text-white m-0'>({+reportNumber + 1 })</p>:null}
+            <div className="flex flex-col gap-4 items-center animate-slide-left-to-right w-full">
+              <p className='text-9xl font-bold  text-inherit m-0'>{+reportNumber ? `بلاغ رقم` : 'نرحب بالسادة المواطنين'}</p>
+              {+reportNumber ? <p className='text-9xl font-bold  text-inherit m-0'>({+reportNumber + 1})</p> : null}
             </div>
           </>
         }

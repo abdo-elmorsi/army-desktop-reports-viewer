@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Input, Button, Error } from '@/components'; // Ensure you have these components
 import { useDatabase } from '@/hooks'; // Import your custom hook
 
@@ -11,14 +11,14 @@ export default function Users() {
 
 
     const handleAddUser = async () => {
-        if (username.trim() === '' || password.trim() === '' ) return;
+        if (username.trim() === '' || password.trim() === '') return;
         await addItem([username, password]);
         setUsername('');
         setPassword('');
     };
 
     const handleEditUser = async () => {
-        if (!editingUser || username.trim() === '' || password.trim() === '' ) return;
+        if (!editingUser || username.trim() === '' || password.trim() === '') return;
         await updateItem(editingUser.id, [username, password]);
         setEditingUser(null);
         setUsername('');
@@ -27,9 +27,7 @@ export default function Users() {
 
     const handleDelete = useCallback(async (id) => {
         const confirmationMessage = 'هل انت متأكد من حذف هذا المستخدم';
-        const isConfirmed = window.location.host.includes('vercel.app')
-            ? window.confirm(confirmationMessage)
-            : await window.ipcRenderer.invoke('show-prompt', confirmationMessage);
+        const isConfirmed = await window.ipcRenderer.invoke('show-prompt', confirmationMessage);
 
         if (isConfirmed) {
             await deleteItem(id);

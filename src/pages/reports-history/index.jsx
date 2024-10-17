@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDatabase, useSavedState } from '@/hooks';
-import { Button, Error, CustomDatePicker } from '@/components';
-import { BiEdit, BiTrash } from 'react-icons/bi';
+import { Error, CustomDatePicker } from '@/components';
 import { statusOptions, statusColors } from '@/assets';
 import { format } from 'date-fns';
 
@@ -35,8 +34,6 @@ const Reports = () => {
   if (error) {
     return <Error message={error} onRetry={() => window.location.reload()} />;
   }
-
-
 
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-900">

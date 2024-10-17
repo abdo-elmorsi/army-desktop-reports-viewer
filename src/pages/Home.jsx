@@ -1,11 +1,12 @@
 import { format, subMonths } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import { useDatabase, useSavedState } from '@/hooks';
-import { Button, Error, CustomDatePicker } from '@/components';
+import { useSavedState } from '@/hooks';
+import { Error, CustomDatePicker } from '@/components';
 
 const Home = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [firstDateInTransactions, setFirstDateInTransactions] = useSavedState("", 'first-date-in-report', { expirationDays: 1 });
   const [startDate, setStartDate] = useState(subMonths(new Date(), 1))
 
@@ -20,15 +21,21 @@ const Home = () => {
 
   useEffect(() => {
     const fetchReportsByDay = async () => {
-      
-      const result = await window.ipcRenderer.invoke('get-reports-by-day', format(startDate, "yyyy-MM-dd"));
+      try {
 
-      setReports(result); // Assuming result is an array of objects like { date, reportCount }
+        const result = await window.ipcRenderer.invoke('get-reports-by-day', format(startDate, "yyyy-MM-dd"));
+        setReports(result);
+      } catch (err) {
+        setError(err?.message || 'Failed to fetch in-progress report index');
+      }
       setLoading(false)
     };
     fetchReportsByDay();
   }, [startDate]);
 
+  if (error) {
+    return <Error message={error} onRetry={() => window.location.reload()} />;
+  }
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-900">
       <header className='flex justify-between items-center'>
