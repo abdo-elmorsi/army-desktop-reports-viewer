@@ -22,13 +22,23 @@ export function sum(arr, prop) {
 
 export const speakReportNumber = async (reportNumber, timeout = 1000) => {
     try {
-        const reportAudio = new Audio(`/src/assets/report-number.mp3`); // Adjust path if needed
-        const numberAudio = new Audio(`/src/assets/${reportNumber}.mp3`); // Adjust path if needed
+        // Get the asset paths using the exposed electronAPI
+        const reportAudioPath = await window.ipcRenderer.invoke(
+            "get-assets-path",
+            "report-number.mp3"
+        );
+        const numberAudioPath = await window.ipcRenderer.invoke(
+            "get-assets-path",
+            `${reportNumber <= 30 ? reportNumber : 1}.mp3`
+        );
+
+        const reportAudio = new Audio(reportAudioPath);
+        const numberAudio = new Audio(numberAudioPath);
 
         // Play "report-number" audio first
         await reportAudio.play();
 
-        // Optional delay between the audios if needed
+        // Optional delay between the audios
         await new Promise((resolve) => setTimeout(resolve, timeout));
 
         // Play the report number audio
@@ -37,4 +47,3 @@ export const speakReportNumber = async (reportNumber, timeout = 1000) => {
         console.error("Error playing audio:", error);
     }
 };
-

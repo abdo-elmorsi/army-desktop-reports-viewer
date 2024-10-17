@@ -24,7 +24,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
-const isProduction = false;
+const isProduction = true;
 
 async function createWindow() {
     win = new BrowserWindow({
@@ -125,7 +125,7 @@ app.whenReady().then(() => {
     ipcMain.handle("add-report", async (_, status, createdAt) => {
         return DatabaseManager.addReport(status, createdAt);
     });
-    ipcMain.handle("get-reports-by-day", async (_,startDate) => {
+    ipcMain.handle("get-reports-by-day", async (_, startDate) => {
         return DatabaseManager.getReportsByDay(startDate);
     });
 
@@ -139,6 +139,21 @@ app.whenReady().then(() => {
 
     ipcMain.handle("get-first-date-in-report", async () => {
         return DatabaseManager.getFirstReportDate();
+    });
+    ipcMain.handle("get-assets-path", async (_, fileName) => {
+        if (process.env.NODE_ENV === "development") {
+            // Assets in src/assets during development
+            return path.join("src/assets/audio", fileName);
+        } else {
+            const basePath = app.getAppPath();
+            const assetPath = path.join(
+                basePath.replace("app.asar", ""),
+                "assets",
+                "audio",
+                fileName
+            );
+            return assetPath;
+        }
     });
 
     ipcMain.handle("show-prompt", async (_, message) => {

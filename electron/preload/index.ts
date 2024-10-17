@@ -14,6 +14,7 @@ const validChannels = [
     "get-first-date-in-report",
     "show-prompt",
     "open-external-link",
+    "get-assets-path"
 ];
 
 // Expose ipcRenderer methods to the renderer process
