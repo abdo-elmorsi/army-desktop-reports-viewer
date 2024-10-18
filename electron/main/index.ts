@@ -171,6 +171,10 @@ app.whenReady().then(() => {
                 : "OK Value"
             : null;
     });
+
+    ipcMain.handle('force-crash',async () => {
+        app.exit(1); // Forcefully exit the app with an error code
+      });
 });
 
 app.on("window-all-closed", () => {
