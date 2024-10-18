@@ -167,7 +167,6 @@ class DatabaseManager {
     public static getReportsByDay(
         startDate: string
     ): { date: string; reportCount: number }[] {
-        
         const query = `
             SELECT 
                 DATE(createdAt) as date, 
@@ -178,7 +177,7 @@ class DatabaseManager {
             ORDER BY DATE(createdAt);
         `;
 
-        return this.executeQuery(query, [startDate]) as {
+        return this.executeQuery(query, [format(startDate, "yyyy-MM-dd")]) as {
             date: string;
             reportCount: number;
         }[];
@@ -191,7 +190,10 @@ class DatabaseManager {
         const stmt = this.prepareStatement(
             "INSERT INTO report (status, createdAt) VALUES (?, ?)"
         );
-        const result = stmt?.run(status, createdAt) as Result;
+        const result = stmt?.run(
+            status,
+            format(createdAt, "yyyy-MM-dd")
+        ) as Result;
         return {
             id: result?.lastInsertRowid,
             status,

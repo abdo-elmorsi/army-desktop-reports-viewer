@@ -20,7 +20,7 @@ export function sum(arr, prop) {
 //     window.speechSynthesis.speak(speech); // Speak the text
 // };
 
-export const speakReportNumber = async (reportNumber, timeout = 1000) => {
+export const speakReportNumber = async (reportNumber, timeout = 1200) => {
     try {
         // Get the asset paths using the exposed electronAPI
         const reportAudioPath = await window.ipcRenderer.invoke(
