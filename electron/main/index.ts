@@ -16,10 +16,6 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 if (os.release().startsWith("6.1")) app.disableHardwareAcceleration();
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
-if (!app.requestSingleInstanceLock()) {
-    app.quit();
-    process.exit(0);
-}
 
 let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
@@ -56,6 +52,10 @@ async function createWindow() {
     win.webContents.setWindowOpenHandler(({ url }) => {
         if (url.startsWith("https:")) shell.openExternal(url);
         return { action: "deny" };
+    });
+
+    win.on("closed", () => {
+        win = null;
     });
 }
 
@@ -118,6 +118,7 @@ app.whenReady().then(() => {
     ipcMain.handle("get-report", async (_, status, date) => {
         return DatabaseManager.getReports(status, date);
     });
+
     ipcMain.handle("get-in-progress-report-index", async () => {
         return DatabaseManager.getInProgressReportIndex();
     });
@@ -125,6 +126,7 @@ app.whenReady().then(() => {
     ipcMain.handle("add-report", async (_, status, createdAt) => {
         return DatabaseManager.addReport(status, createdAt);
     });
+
     ipcMain.handle("get-reports-by-day", async (_, startDate) => {
         return DatabaseManager.getReportsByDay(startDate);
     });
@@ -140,6 +142,7 @@ app.whenReady().then(() => {
     ipcMain.handle("get-first-date-in-report", async () => {
         return DatabaseManager.getFirstReportDate();
     });
+
     ipcMain.handle("get-assets-path", async (_, fileName) => {
         if (process.env.NODE_ENV === "development") {
             // Assets in src/assets during development
@@ -172,44 +175,43 @@ app.whenReady().then(() => {
             : null;
     });
 
-    ipcMain.handle('force-crash',async () => {
+    ipcMain.handle('force-crash', async () => {
         app.exit(1); // Forcefully exit the app with an error code
-      });
+    });
+
+    // Handle opening a new window
+    ipcMain.handle("open-win", (_, arg) => {
+        const childWindow = new BrowserWindow({
+            width: 800,
+            height: 600,
+            webPreferences: {
+                preload,
+                contextIsolation: true,
+                nodeIntegration: false,
+            },
+        });
+
+        if (VITE_DEV_SERVER_URL) {
+            childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`);
+        } else {
+            childWindow.loadFile(indexHtml, { hash: arg });
+        }
+
+        childWindow.on("closed", () => {
+            // Handle any cleanup if necessary
+        });
+    });
 });
 
 app.on("window-all-closed", () => {
-    win = null;
     if (process.platform !== "darwin") app.quit();
 });
 
-app.on("second-instance", () => {
-    if (win) {
-        if (win.isMinimized()) win.restore();
-        win.focus();
-    }
-});
-
 app.on("activate", () => {
-    const allWindows = BrowserWindow.getAllWindows();
-    if (allWindows.length) {
-        allWindows[0].focus();
+    if (win) {
+        win.focus(); // Focus the existing window
     } else {
-        createWindow();
-    }
-});
-
-ipcMain.handle("open-win", (_, arg) => {
-    const childWindow = new BrowserWindow({
-        webPreferences: {
-            preload,
-            contextIsolation: true,
-        },
-    });
-
-    if (VITE_DEV_SERVER_URL) {
-        childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`);
-    } else {
-        childWindow.loadFile(indexHtml, { hash: arg });
+        createWindow(); // Create a new window if none exist
     }
 });
 

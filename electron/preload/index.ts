@@ -15,7 +15,8 @@ const validChannels = [
     "show-prompt",
     "open-external-link",
     "get-assets-path",
-    "force-crash"
+    "force-crash",
+    "open-win"
 ];
 
 // Expose ipcRenderer methods to the renderer process
