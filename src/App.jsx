@@ -26,7 +26,7 @@ function App() {
         await window.ipcRenderer.invoke('force-crash');
       }
     } catch (err) {
-      console.log("err.message");
+      console.log(err);
     }
   };
 
